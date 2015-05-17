@@ -1,6 +1,6 @@
 {
   "name": "open-on-bitbucket",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "./lib/main",
   "description": "View the active file on bitbucket.org",
   "repository": "https://github.com/mark-adams/open-on-bitbucket",
