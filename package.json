@@ -1,0 +1,24 @@
+{
+  "name": "open-on-bitbucket",
+  "version": "0.0.0",
+  "main": "./lib/main",
+  "description": "View the active file on bitbucket.org",
+  "repository": "https://github.com/mark-adams/open-on-bitbucket",
+  "license": "MIT",
+  "activationCommands": {
+    "atom-pane": [
+      "open-on-bitbucket:blame",
+      "open-on-bitbucket:branch-compare",
+      "open-on-bitbucket:copy-url",
+      "open-on-bitbucket:file",
+      "open-on-bitbucket:history",
+      "open-on-bitbucket:repository"
+    ]
+  },
+  "engines": {
+    "atom": "*"
+  },
+  "dependencies": {
+    "fs-plus": "2.x"
+  }
+}
