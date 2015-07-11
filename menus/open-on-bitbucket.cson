@@ -2,14 +2,14 @@
   {
     'label': 'Packages'
     'submenu': [
-      'label': 'Open On GitHub'
+      'label': 'Open On Bitbucket'
       'submenu': [
-        { 'label': 'Blame', 'command': 'open-on-github:blame' }
-        { 'label': 'Branch Compare', 'command': 'open-on-github:branch-compare' }
-        { 'label': 'Copy URL', 'command': 'open-on-github:copy-url' }
-        { 'label': 'File', 'command': 'open-on-github:file' }
-        { 'label': 'History', 'command': 'open-on-github:history' }
-        { 'label': 'Repository', 'command': 'open-on-github:repository' }
+        { 'label': 'Blame', 'command': 'open-on-bitbucket:blame' }
+        { 'label': 'Branch Compare', 'command': 'open-on-bitbucket:branch-compare' }
+        { 'label': 'Copy URL', 'command': 'open-on-bitbucket:copy-url' }
+        { 'label': 'File', 'command': 'open-on-bitbucket:file' }
+        { 'label': 'History', 'command': 'open-on-bitbucket:history' }
+        { 'label': 'Repository', 'command': 'open-on-bitbucket:repository' }
       ]
     ]
   }

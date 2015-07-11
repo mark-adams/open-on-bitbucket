@@ -6,7 +6,7 @@
 	ignorecase = true
 	precomposeunicode = false
 [remote "upstream/color"]
-	url = https://github.com/some-user/some-repo.git
+	url = https://bitbucket.org/some-user/some-repo.git
 	fetch = +refs/heads/*:refs/remotes/upstream/color/*
 [branch "baz"]
 	remote = upstream/color

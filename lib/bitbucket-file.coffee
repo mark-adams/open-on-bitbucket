@@ -3,11 +3,11 @@ Shell = require 'shell'
 parseUrl = require('url').parse
 
 module.exports =
-class GitHubFile
+class BitbucketFile
 
   # Public
   @fromPath: (filePath) ->
-    new GitHubFile(filePath)
+    new BitbucketFile(filePath)
 
   # Internal
   constructor: (@filePath) ->
@@ -50,19 +50,16 @@ class GitHubFile
 
   openRepository: ->
     if @isOpenable()
-      @openUrlInBrowser(@githubRepoUrl())
+      @openUrlInBrowser(@bitbucketRepoUrl())
     else
       @reportValidationErrors()
 
   getLineRangeSuffix: (lineRange) ->
-    if lineRange and atom.config.get('open-on-github.includeLineNumbersInUrls')
+    if lineRange and atom.config.get('open-on-bitbucket.includeLineNumbersInUrls')
       lineRange = Range.fromObject(lineRange)
       startRow = lineRange.start.row + 1
       endRow = lineRange.end.row + 1
-      if startRow is endRow
-        "#L#{startRow}"
-      else
-        "#L#{startRow}-L#{endRow}"
+      "#cl-#{startRow}"
     else
       ''
 
@@ -78,8 +75,8 @@ class GitHubFile
     unless @gitUrl()
       return ["No URL defined for remote: #{@remoteName()}"]
 
-    unless @githubRepoUrl()
-      return ["Remote URL is not hosted on GitHub: #{@gitUrl()}"]
+    unless @bitbucketRepoUrl()
+      return ["Remote URL is not hosted on Bitbucket: #{@gitUrl()}"]
 
     []
 
@@ -94,19 +91,19 @@ class GitHubFile
 
   # Internal
   blobUrl: ->
-    "#{@githubRepoUrl()}/blob/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@bitbucketRepoUrl()}/src/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   blameUrl: ->
-    "#{@githubRepoUrl()}/blame/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@bitbucketRepoUrl()}/annotate/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   historyUrl: ->
-    "#{@githubRepoUrl()}/commits/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    "#{@bitbucketRepoUrl()}/history-node/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
   branchCompareUrl: ->
-    "#{@githubRepoUrl()}/compare/#{@encodeSegments(@branchName())}"
+    "#{@bitbucketRepoUrl()}/branch/#{@encodeSegments(@branchName())}"
 
   encodeSegments: (segments='') ->
     segments = segments.split('/')
@@ -119,29 +116,29 @@ class GitHubFile
     @repo.getConfigValue("remote.#{remoteOrBestGuess}.url", @filePath)
 
   # Internal
-  githubRepoUrl: ->
+  bitbucketRepoUrl: ->
     url = @gitUrl()
-    if url.match /https:\/\/[^\/]+\// # e.g., https://github.com/foo/bar.git
+    if url.match /https:\/\/[^\/]+\// # e.g., https://bitbucket.org/foo/bar.git
       url = url.replace(/\.git$/, '')
-    else if url.match /git@[^:]+:/    # e.g., git@github.com:foo/bar.git
+    else if url.match /git@[^:]+:/    # e.g., git@bitbucket.org:foo/bar.git
       url = url.replace /^git@([^:]+):(.+)$/, (match, host, repoPath) ->
         repoPath = repoPath.replace(/^\/+/, '') # replace leading slashes
         "http://#{host}/#{repoPath}".replace(/\.git$/, '')
-    else if url.match /ssh:\/\/git@([^\/]+)\//    # e.g., ssh://git@github.com/foo/bar.git
+    else if url.match /ssh:\/\/git@([^\/]+)\//    # e.g., ssh://git@bitbucket.org/foo/bar.git
       url = "http://#{url.substring(10).replace(/\.git$/, '')}"
-    else if url.match /^git:\/\/[^\/]+\// # e.g., git://github.com/foo/bar.git
+    else if url.match /^git:\/\/[^\/]+\// # e.g., git://bitbucket.org/foo/bar.git
       url = "http#{url.substring(3).replace(/\.git$/, '')}"
 
     url = url.replace(/\/+$/, '')
 
-    return url unless @isBitbucketUrl(url)
+    return url unless @isGithubUrl(url)
 
-  isBitbucketUrl: (url) ->
-    return true if url.indexOf('git@bitbucket.org') is 0
+  isGithubUrl: (url) ->
+    return true if url.indexOf('git@github.com') is 0
 
     try
       {host} = parseUrl(url)
-      host is 'bitbucket.org'
+      host is 'github.com'
 
   # Internal
   repoRelativePath: ->

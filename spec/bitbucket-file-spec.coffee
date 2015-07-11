@@ -1,13 +1,13 @@
-GitHubFile = require '../lib/github-file'
+BitbucketFile = require '../lib/bitbucket-file'
 fs = require 'fs-plus'
 path = require 'path'
 os = require 'os'
 
-describe "GitHubFile", ->
-  [githubFile, editor] = []
+describe "BitbucketFile", ->
+  [bitbucketFile, editor] = []
 
   describe "commands", ->
-    workingDirPath = path.join(os.tmpdir(), 'open-on-github-working-dir')
+    workingDirPath = path.join(os.tmpdir(), 'open-on-bitbucket-working-dir')
     filePathRelativeToWorkingDir = 'some-dir/some-file.md'
 
     fixturePath = (fixtureName) ->
@@ -23,14 +23,14 @@ describe "GitHubFile", ->
       filePath = path.join(subdirectoryPath, 'some-file.md')
       fs.writeFileSync filePath, 'some file content'
 
-    setupGithubFile = ->
+    setupBitbucketFile = ->
       atom.project.setPaths([workingDirPath])
       waitsForPromise ->
          atom.workspace.open(filePathRelativeToWorkingDir)
 
       runs ->
         editor = atom.workspace.getActiveTextEditor()
-        githubFile = GitHubFile.fromPath(editor.getPath())
+        bitbucketFile = BitbucketFile.fromPath(editor.getPath())
 
     teardownWorkingDirAndRestoreFixture = (fixtureName) ->
       success = null
@@ -53,120 +53,120 @@ describe "GitHubFile", ->
       waitsFor -> success
 
     describe "open", ->
-      describe "when the file is openable on GitHub.com", ->
-        fixtureName = 'github-remote'
+      describe "when the file is openable on Bitbucket.org", ->
+        fixtureName = 'bitbucket-remote'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com blob URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md'
+        it "opens the Bitbucket.org src URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.open()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md'
 
         describe "when text is selected", ->
-          it "opens the GitHub.com blob URL for the file with the selection range in the hash", ->
-            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
-            spyOn(githubFile, 'openUrlInBrowser')
-            githubFile.open([[0, 0], [1, 1]])
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-              'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2'
+          it "opens the Bitbucket.org src URL for the file with the selection range in the hash", ->
+            atom.config.set('open-on-bitbucket.includeLineNumbersInUrls', true)
+            spyOn(bitbucketFile, 'openUrlInBrowser')
+            bitbucketFile.open([[0, 0], [1, 1]])
+            expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+              'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-1'
 
         describe "when the file has a '#' in its name", ->
-          it "opens the GitHub.com blob URL for the file", ->
+          it "opens the Bitbucket.org src URL for the file", ->
             waitsForPromise ->
               atom.workspace.open('a/b#/test#hash.md')
 
             runs ->
               editor = atom.workspace.getActiveTextEditor()
-              githubFile = GitHubFile.fromPath(editor.getPath())
-              spyOn(githubFile, 'openUrlInBrowser')
-              githubFile.open()
-              expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-                'https://github.com/some-user/some-repo/blob/master/a/b%23/test%23hash.md'
+              bitbucketFile = BitbucketFile.fromPath(editor.getPath())
+              spyOn(bitbucketFile, 'openUrlInBrowser')
+              bitbucketFile.open()
+              expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+                'https://bitbucket.org/some-user/some-repo/src/master/a/b%23/test%23hash.md'
 
       describe "when the branch has a '/' in its name", ->
         fixtureName = 'branch-with-slash-in-name'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com blob URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/blob/foo/bar/some-dir/some-file.md'
+        it "opens the Bitbucket.org src URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.open()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/src/foo/bar/some-dir/some-file.md'
 
       describe "when the branch has a '#' in its name", ->
         fixtureName = 'branch-with-hash-in-name'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com blob URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/blob/a%23b%23c/some-dir/some-file.md'
+        it "opens the Bitbucket.org src URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.open()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/src/a%23b%23c/some-dir/some-file.md'
 
       describe "when the remote has a '/' in its name", ->
         fixtureName = 'remote-with-slash-in-name'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com blob URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/blob/baz/some-dir/some-file.md'
+        it "opens the Bitbucket.org src URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.open()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/src/baz/some-dir/some-file.md'
 
       describe "when the local branch is not tracked", ->
         fixtureName = 'non-tracked-branch'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com blob URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/blob/non-tracked-branch/some-dir/some-file.md'
+        it "opens the Bitbucket.org src URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.open()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/src/non-tracked-branch/some-dir/some-file.md'
 
       describe "when there is no remote", ->
         fixtureName = 'no-remote'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
         it "logs an error", ->
           spyOn(atom.notifications, 'addWarning')
-          githubFile.open()
+          bitbucketFile.open()
           expect(atom.notifications.addWarning).toHaveBeenCalledWith \
             'No URL defined for remote: null'
 
@@ -174,185 +174,185 @@ describe "GitHubFile", ->
         beforeEach ->
           teardownWorkingDirAndRestoreFixture()
           fs.mkdirSync(workingDirPath)
-          setupGithubFile()
+          setupBitbucketFile()
 
         it "does nothing", ->
           spyOn(atom.notifications, 'addWarning')
-          githubFile.open()
+          bitbucketFile.open()
           expect(atom.notifications.addWarning).toHaveBeenCalled()
           expect(atom.notifications.addWarning.mostRecentCall.args[0]).toContain("No repository found")
 
-      describe "when the remote repo is not hosted on github.com", ->
-        fixtureName = 'github-enterprise-remote'
+      describe "when the remote repo is not hosted on bitbucket.org", ->
+        fixtureName = 'bitbucket-enterprise-remote'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          githubFile = setupGithubFile()
+          bitbucketFile = setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens a GitHub enterprise style blob URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.open()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://git.enterprize.me/some-user/some-repo/blob/master/some-dir/some-file.md'
+        it "opens a Bitbucket enterprise style src URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.open()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://git.enterprize.me/some-user/some-repo/src/master/some-dir/some-file.md'
 
     describe "blame", ->
-      describe "when the file is openable on GitHub.com", ->
-        fixtureName = 'github-remote'
+      describe "when the file is openable on Bitbucket.org", ->
+        fixtureName = 'bitbucket-remote'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com blame URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.blame()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md'
+        it "opens the Bitbucket.org blame URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.blame()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/annotate/master/some-dir/some-file.md'
 
         describe "when text is selected", ->
-          it "opens the GitHub.com blame URL for the file with the selection range in the hash", ->
-            atom.config.set('open-on-github.includeLineNumbersInUrls', true)
-            spyOn(githubFile, 'openUrlInBrowser')
-            githubFile.blame([[0, 0], [1, 1]])
-            expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-              'https://github.com/some-user/some-repo/blame/master/some-dir/some-file.md#L1-L2'
+          it "opens the Bitbucket.org blame URL for the file with the selection range in the hash", ->
+            atom.config.set('open-on-bitbucket.includeLineNumbersInUrls', true)
+            spyOn(bitbucketFile, 'openUrlInBrowser')
+            bitbucketFile.blame([[0, 0], [1, 1]])
+            expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+              'https://bitbucket.org/some-user/some-repo/annotate/master/some-dir/some-file.md#cl-1'
 
     describe "branchCompare", ->
-      describe "when the file is openable on GitHub.com", ->
-        fixtureName = 'github-remote'
+      describe "when the file is openable on Bitbucket.org", ->
+        fixtureName = 'bitbucket-remote'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com branch compare URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.openBranchCompare()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/compare/master'
+        it "opens the Bitbucket.org branch compare URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.openBranchCompare()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/branch/master'
 
     describe "history", ->
-      describe "when the file is openable on GitHub.com", ->
-        fixtureName = 'github-remote'
+      describe "when the file is openable on Bitbucket.org", ->
+        fixtureName = 'bitbucket-remote'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com history URL for the file", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.history()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo/commits/master/some-dir/some-file.md'
+        it "opens the Bitbucket.org history URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.history()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/history-node/master/some-dir/some-file.md'
 
     describe "copyUrl", ->
-      fixtureName = 'github-remote'
+      fixtureName = 'bitbucket-remote'
 
       beforeEach ->
         setupWorkingDir(fixtureName)
-        atom.config.set('open-on-github.includeLineNumbersInUrls', true)
-        setupGithubFile()
+        atom.config.set('open-on-bitbucket.includeLineNumbersInUrls', true)
+        setupBitbucketFile()
 
       afterEach ->
         teardownWorkingDirAndRestoreFixture(fixtureName)
 
       describe "when text is selected", ->
         it "copies the URL to the clipboard with the selection range in the hash", ->
-          githubFile.copyUrl([[0, 0], [1, 1]])
-          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L1-L2'
+          bitbucketFile.copyUrl([[0, 0], [1, 1]])
+          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-1'
 
       describe "when no text is selected", ->
         it "copies the URL to the clipboard with the cursor location in the hash", ->
-          githubFile.copyUrl([[2, 1], [2, 1]])
-          expect(atom.clipboard.read()).toBe 'https://github.com/some-user/some-repo/blob/master/some-dir/some-file.md#L3'
+          bitbucketFile.copyUrl([[2, 1], [2, 1]])
+          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-3'
 
     describe "openRepository", ->
-      describe "when the file is openable on GitHub.com", ->
-        fixtureName = 'github-remote'
+      describe "when the file is openable on Bitbucket.org", ->
+        fixtureName = 'bitbucket-remote'
 
         beforeEach ->
           setupWorkingDir(fixtureName)
-          setupGithubFile()
+          setupBitbucketFile()
 
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the GitHub.com repository URL", ->
-          spyOn(githubFile, 'openUrlInBrowser')
-          githubFile.openRepository()
-          expect(githubFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://github.com/some-user/some-repo'
+        it "opens the Bitbucket.org repository URL", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.openRepository()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo'
 
-  describe "githubRepoUrl", ->
+  describe "bitbucketRepoUrl", ->
     beforeEach ->
-      githubFile = new GitHubFile()
+      bitbucketFile = new BitbucketFile()
 
-    it "returns the GitHub.com URL for an HTTP remote URL", ->
-      githubFile.gitUrl = -> "https://github.com/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+    it "returns the Bitbucket.org URL for an HTTP remote URL", ->
+      bitbucketFile.gitUrl = -> "https://bitbucket.org/foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://bitbucket.org/foo/bar"
 
-    it "returns the GitHub.com URL for an SSH remote URL", ->
-      githubFile.gitUrl = -> "git@github.com:foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+    it "returns the Bitbucket.org URL for an SSH remote URL", ->
+      bitbucketFile.gitUrl = -> "git@bitbucket.org:foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
 
-    it "returns a GitHub enterprise URL for a non-Github.com remote URL", ->
-      githubFile.gitUrl = -> "https://git.enterprize.me/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
+    it "returns a Bitbucket enterprise URL for a non-Github.com remote URL", ->
+      bitbucketFile.gitUrl = -> "https://git.enterprize.me/foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
 
-      githubFile.gitUrl = -> "git@git.enterprize.me:foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
+      bitbucketFile.gitUrl = -> "git@git.enterprize.me:foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
 
-    it "returns the GitHub.com URL for a git:// URL", ->
-      githubFile.gitUrl = -> "git://github.com/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+    it "returns the Bitbucket.org URL for a git:// URL", ->
+      bitbucketFile.gitUrl = -> "git://bitbucket.org/foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
 
-    it "returns the GitHub.com URL for a ssh:// URL", ->
-      githubFile.gitUrl = -> "ssh://git@github.com/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+    it "returns the Bitbucket.org URL for a ssh:// URL", ->
+      bitbucketFile.gitUrl = -> "ssh://git@bitbucket.org/foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
 
-    it "returns undefined for Bitbucket URLs", ->
-      githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo.git"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+    it "returns undefined for GithubURLs", ->
+      bitbucketFile.gitUrl = -> "https://github.com/somebody/repo.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBeUndefined()
 
-      githubFile.gitUrl = -> "https://bitbucket.org/somebody/repo"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      bitbucketFile.gitUrl = -> "https://github.com/somebody/repo"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBeUndefined()
 
-      githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo.git"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      bitbucketFile.gitUrl = -> "git@github.com:somebody/repo.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBeUndefined()
 
-      githubFile.gitUrl = -> "git@bitbucket.org:somebody/repo"
-      expect(githubFile.githubRepoUrl()).toBeUndefined()
+      bitbucketFile.gitUrl = -> "git@github.com:somebody/repo"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBeUndefined()
 
     it "removes leading and trailing slashes", ->
-      githubFile.gitUrl = -> "https://github.com/foo/bar/"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+      bitbucketFile.gitUrl = -> "https://bitbucket.org/foo/bar/"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://bitbucket.org/foo/bar"
 
-      githubFile.gitUrl = -> "https://github.com/foo/bar//////"
-      expect(githubFile.githubRepoUrl()).toBe "https://github.com/foo/bar"
+      bitbucketFile.gitUrl = -> "https://bitbucket.org/foo/bar//////"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://bitbucket.org/foo/bar"
 
-      githubFile.gitUrl = -> "git@github.com:/foo/bar.git"
-      expect(githubFile.githubRepoUrl()).toBe "http://github.com/foo/bar"
+      bitbucketFile.gitUrl = -> "git@bitbucket.org:/foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
 
   it "activates when a command is triggered on the active editor", ->
-    activationPromise = atom.packages.activatePackage('open-on-github')
+    activationPromise = atom.packages.activatePackage('open-on-bitbucket')
 
     waitsForPromise ->
        atom.workspace.open()
 
     runs ->
-      atom.commands.dispatch(atom.views.getView(atom.workspace.getActivePane()), 'open-on-github:file')
+      atom.commands.dispatch(atom.views.getView(atom.workspace.getActivePane()), 'open-on-bitbucket:file')
 
     waitsForPromise ->
       activationPromise

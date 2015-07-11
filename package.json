@@ -1,18 +1,18 @@
 {
-  "name": "open-on-github",
-  "version": "0.36.0",
+  "name": "open-on-bitbucket",
+  "version": "0.2.0",
   "main": "./lib/main",
-  "description": "View the active file on github.com",
-  "repository": "https://github.com/atom/open-on-github",
+  "description": "View the active file on bitbucket.org",
+  "repository": "https://github.com/mark-adams/open-on-bitbucket",
   "license": "MIT",
   "activationCommands": {
     "atom-pane": [
-      "open-on-github:blame",
-      "open-on-github:branch-compare",
-      "open-on-github:copy-url",
-      "open-on-github:file",
-      "open-on-github:history",
-      "open-on-github:repository"
+      "open-on-bitbucket:blame",
+      "open-on-bitbucket:branch-compare",
+      "open-on-bitbucket:copy-url",
+      "open-on-bitbucket:file",
+      "open-on-bitbucket:history",
+      "open-on-bitbucket:repository"
     ]
   },
   "engines": {

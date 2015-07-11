@@ -1,4 +1,4 @@
-GitHubFile  = require './github-file'
+BitbucketFile  = require './bitbucket-file'
 
 module.exports =
   config:
@@ -8,29 +8,29 @@ module.exports =
 
   activate: ->
     atom.commands.add 'atom-pane',
-      'open-on-github:file': ->
+      'open-on-bitbucket:file': ->
         if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).open(getSelectedRange())
+          BitbucketFile.fromPath(itemPath).open(getSelectedRange())
 
-      'open-on-github:blame': ->
+      'open-on-bitbucket:blame': ->
         if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).blame(getSelectedRange())
+          BitbucketFile.fromPath(itemPath).blame(getSelectedRange())
 
-      'open-on-github:history': ->
+      'open-on-bitbucket:history': ->
         if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).history()
+          BitbucketFile.fromPath(itemPath).history()
 
-      'open-on-github:copy-url': ->
+      'open-on-bitbucket:copy-url': ->
         if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).copyUrl(getSelectedRange())
+          BitbucketFile.fromPath(itemPath).copyUrl(getSelectedRange())
 
-      'open-on-github:branch-compare': ->
+      'open-on-bitbucket:branch-compare': ->
         if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).openBranchCompare()
+          BitbucketFile.fromPath(itemPath).openBranchCompare()
 
-      'open-on-github:repository': ->
+      'open-on-bitbucket:repository': ->
         if itemPath = getActivePath()
-          GitHubFile.fromPath(itemPath).openRepository()
+          BitbucketFile.fromPath(itemPath).openRepository()
 
 getActivePath = ->
   atom.workspace.getActivePaneItem()?.getPath?()

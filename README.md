@@ -1,21 +1,22 @@
-# Open on GitHub [![Build Status](https://travis-ci.org/atom/open-on-github.svg?branch=master)](https://travis-ci.org/atom/open-on-github)
+# Open on Bitbucket [![Build Status](https://travis-ci.org/mark-adams/open-on-bitbucket.svg?branch=master)](https://travis-ci.org/mark-adams/open-on-bitbucket)
 
-Provides commands to quickly view the current file on GitHub.com (The Website).
+Provides commands to quickly view the current file on [Bitbucket](https://bitbucket.org).
 
 ## Usage
 
 When editing a file in Atom, use the command palette or keyboard shortcuts to:
 
-- Open the file on github.com `alt-g, o`
-- Open the blame view for the file on github.com `alt-g, b`
-- Open the history view for the file on github.com `alt-g, h`
-- Open the compare page for the current branch on github.com `alt-g, r`
-- Copy the github.com URL for the currently selected lines `alt-g, c`
+- Open the file on bitbucket.org `alt-b, o`
+- Open the blame view for the file on bitbucket.org `alt-b, b`
+- Open the history view for the file on bitbucket.org `alt-b, h`
+- Open the compare page for the current branch on bitbucket.org `alt-b, r`
+- Copy the bitbucket.org URL for the currently selected lines `alt-b, c`
 
-![Command Palette](https://f.cloud.github.com/assets/671378/2241755/23cb72f8-9ce2-11e3-9109-36c76a030f6a.png)
+![Command Palette](https://cloud.githubusercontent.com/assets/472350/7668596/86267acc-fc06-11e4-92e4-8737a632a021.png)
+
 
 ---
 
-Inspired by the [GitHub Tools package][github-tools] for Sublime Text 2.
+Inspired by the [Open on Github package][open-on-github] for Atom.
 
-[github-tools]: https://github.com/temochka/sublime-text-2-github-tools
+[open-on-github]: https://github.com/atom/open-on-github

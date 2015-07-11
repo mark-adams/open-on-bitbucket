@@ -1,7 +1,7 @@
 'atom-workspace':
-  'alt-g o': 'open-on-github:file'
-  'alt-g b': 'open-on-github:blame'
-  'alt-g h': 'open-on-github:history'
-  'alt-g c': 'open-on-github:copy-url'
-  'alt-g r': 'open-on-github:branch-compare'
-  'alt-g g': 'open-on-github:repository'
+  'alt-b o': 'open-on-bitbucket:file'
+  'alt-b b': 'open-on-bitbucket:blame'
+  'alt-b h': 'open-on-bitbucket:history'
+  'alt-b c': 'open-on-bitbucket:copy-url'
+  'alt-b r': 'open-on-bitbucket:branch-compare'
+  'alt-b g': 'open-on-bitbucket:repository'
