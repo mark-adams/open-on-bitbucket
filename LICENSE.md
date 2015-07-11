@@ -1,4 +1,5 @@
 Copyright (c) 2014 Github, Inc. for open-on-github
+
 Copyright (c) 2015 Mark Adams for open-on-bitbucket
 
 Permission is hereby granted, free of charge, to any person obtaining
