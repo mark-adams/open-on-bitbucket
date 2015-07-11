@@ -20,6 +20,10 @@ module.exports =
         if itemPath = getActivePath()
           BitbucketFile.fromPath(itemPath).history()
 
+      'open-on-bitbucket:issues': ->
+        if itemPath = getActivePath()
+          BitbucketFile.fromPath(itemPath).openIssues()
+
       'open-on-bitbucket:copy-url': ->
         if itemPath = getActivePath()
           BitbucketFile.fromPath(itemPath).copyUrl(getSelectedRange())

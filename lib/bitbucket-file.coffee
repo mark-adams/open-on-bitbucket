@@ -48,6 +48,12 @@ class BitbucketFile
     else
       @reportValidationErrors()
 
+  openIssues: ->
+    if @isOpenable()
+      @openUrlInBrowser(@issuesUrl())
+    else
+      @reportValidationErrors()
+
   openRepository: ->
     if @isOpenable()
       @openUrlInBrowser(@bitbucketRepoUrl())
@@ -100,6 +106,10 @@ class BitbucketFile
   # Internal
   historyUrl: ->
     "#{@bitbucketRepoUrl()}/history-node/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+
+  # Internal
+  issuesUrl: ->
+    "#{@bitbucketRepoUrl()}/issues"
 
   # Internal
   branchCompareUrl: ->

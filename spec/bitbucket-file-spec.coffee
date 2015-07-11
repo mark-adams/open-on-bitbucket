@@ -26,7 +26,7 @@ describe "BitbucketFile", ->
     setupBitbucketFile = ->
       atom.project.setPaths([workingDirPath])
       waitsForPromise ->
-         atom.workspace.open(filePathRelativeToWorkingDir)
+        atom.workspace.open(filePathRelativeToWorkingDir)
 
       runs ->
         editor = atom.workspace.getActiveTextEditor()
@@ -295,6 +295,23 @@ describe "BitbucketFile", ->
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://bitbucket.org/some-user/some-repo'
 
+    describe "openIssues", ->
+      describe 'when the file is openable on Bitbucket.org', ->
+        fixtureName = 'bitbucket-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupBitbucketFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it 'opens the Bitbucket.org issues URL', ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.openIssues()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://bitbucket.org/some-user/some-repo/issues'
+
   describe "bitbucketRepoUrl", ->
     beforeEach ->
       bitbucketFile = new BitbucketFile()
@@ -349,7 +366,7 @@ describe "BitbucketFile", ->
     activationPromise = atom.packages.activatePackage('open-on-bitbucket')
 
     waitsForPromise ->
-       atom.workspace.open()
+      atom.workspace.open()
 
     runs ->
       atom.commands.dispatch(atom.views.getView(atom.workspace.getActivePane()), 'open-on-bitbucket:file')

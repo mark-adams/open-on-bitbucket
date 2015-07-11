@@ -9,6 +9,7 @@ When editing a file in Atom, use the command palette or keyboard shortcuts to:
 - Open the file on bitbucket.org `alt-b, o`
 - Open the blame view for the file on bitbucket.org `alt-b, b`
 - Open the history view for the file on bitbucket.org `alt-b, h`
+- Open the issues view for the repository the file belongs to on github.com `alt-g, i`
 - Open the compare page for the current branch on bitbucket.org `alt-b, r`
 - Copy the bitbucket.org URL for the currently selected lines `alt-b, c`
 

@@ -1,6 +1,6 @@
 {
   "name": "open-on-bitbucket",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "main": "./lib/main",
   "description": "View the active file on bitbucket.org",
   "repository": "https://github.com/mark-adams/open-on-bitbucket",
@@ -12,6 +12,7 @@
       "open-on-bitbucket:copy-url",
       "open-on-bitbucket:file",
       "open-on-bitbucket:history",
+      "open-on-bitbucket:issues",
       "open-on-bitbucket:repository"
     ]
   },
@@ -20,5 +21,8 @@
   },
   "dependencies": {
     "fs-plus": "2.x"
+  },
+  "devDependencies": {
+    "coffeelint": "^1.9.7"
   }
 }

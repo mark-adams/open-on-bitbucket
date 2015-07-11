@@ -2,6 +2,7 @@
   'alt-b o': 'open-on-bitbucket:file'
   'alt-b b': 'open-on-bitbucket:blame'
   'alt-b h': 'open-on-bitbucket:history'
+  'alt-g i': 'open-on-bitbucket:issues'
   'alt-b c': 'open-on-bitbucket:copy-url'
   'alt-b r': 'open-on-bitbucket:branch-compare'
   'alt-b g': 'open-on-bitbucket:repository'
