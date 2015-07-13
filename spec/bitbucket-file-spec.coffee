@@ -324,6 +324,10 @@ describe "BitbucketFile", ->
       bitbucketFile.gitUrl = -> "git@bitbucket.org:foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
 
+    it "returns the Bitbucket enterprise URL for an SSH remote URL with a non-standard user", ->
+      bitbucketFile.gitUrl = -> "git-user@bitbucket.org:foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
+
     it "returns a Bitbucket enterprise URL for a non-Github.com remote URL", ->
       bitbucketFile.gitUrl = -> "https://git.enterprize.me/foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
