@@ -271,12 +271,12 @@ describe "BitbucketFile", ->
       describe "when text is selected", ->
         it "copies the URL to the clipboard with the selection range in the hash", ->
           bitbucketFile.copyUrl([[0, 0], [1, 1]])
-          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-1:2'
+          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#cl-1:2'
 
       describe "when no text is selected", ->
         it "copies the URL to the clipboard with the cursor location in the hash", ->
           bitbucketFile.copyUrl([[2, 1], [2, 1]])
-          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-3'
+          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#cl-3'
 
     describe "openRepository", ->
       describe "when the file is openable on Bitbucket.org", ->

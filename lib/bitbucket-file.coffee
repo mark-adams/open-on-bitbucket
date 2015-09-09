@@ -38,7 +38,7 @@ class BitbucketFile
 
   copyUrl: (lineRange) ->
     if @isOpenable()
-      atom.clipboard.write(@blobUrl() + @getLineRangeSuffix(lineRange))
+      atom.clipboard.write(@shaUrl() + @getLineRangeSuffix(lineRange))
     else
       @reportValidationErrors()
 
@@ -104,6 +104,10 @@ class BitbucketFile
     "#{@bitbucketRepoUrl()}/src/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
 
   # Internal
+  shaUrl: ->
+    "#{@bitbucketRepoUrl()}/src/#{@encodeSegments(@sha())}/#{@encodeSegments(@repoRelativePath())}"
+
+  # Internal
   blameUrl: ->
     "#{@bitbucketRepoUrl()}/annotate/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
 
@@ -167,6 +171,10 @@ class BitbucketFile
     return null unless branchRemote?.length > 0
 
     branchRemote
+
+  # Internal
+  sha: ->
+    @repo.getReferenceTarget("HEAD", @filePath)
 
   # Internal
   branchName: ->
