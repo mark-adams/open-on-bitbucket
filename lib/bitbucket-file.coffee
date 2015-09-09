@@ -65,7 +65,11 @@ class BitbucketFile
       lineRange = Range.fromObject(lineRange)
       startRow = lineRange.start.row + 1
       endRow = lineRange.end.row + 1
-      "#cl-#{startRow}"
+
+      if startRow is endRow
+        "#cl-#{startRow}"
+      else
+        "#cl-#{startRow}:#{endRow}"
     else
       ''
 

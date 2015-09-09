@@ -75,7 +75,7 @@ describe "BitbucketFile", ->
             spyOn(bitbucketFile, 'openUrlInBrowser')
             bitbucketFile.open([[0, 0], [1, 1]])
             expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
-              'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-1'
+              'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-1:2'
 
         describe "when the file has a '#' in its name", ->
           it "opens the Bitbucket.org src URL for the file", ->
@@ -221,7 +221,7 @@ describe "BitbucketFile", ->
             spyOn(bitbucketFile, 'openUrlInBrowser')
             bitbucketFile.blame([[0, 0], [1, 1]])
             expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
-              'https://bitbucket.org/some-user/some-repo/annotate/master/some-dir/some-file.md#cl-1'
+              'https://bitbucket.org/some-user/some-repo/annotate/master/some-dir/some-file.md#cl-1:2'
 
     describe "branchCompare", ->
       describe "when the file is openable on Bitbucket.org", ->
@@ -271,7 +271,7 @@ describe "BitbucketFile", ->
       describe "when text is selected", ->
         it "copies the URL to the clipboard with the selection range in the hash", ->
           bitbucketFile.copyUrl([[0, 0], [1, 1]])
-          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-1'
+          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md#cl-1:2'
 
       describe "when no text is selected", ->
         it "copies the URL to the clipboard with the cursor location in the hash", ->
