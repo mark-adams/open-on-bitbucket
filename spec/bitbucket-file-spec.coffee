@@ -192,11 +192,11 @@ describe "BitbucketFile", ->
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens a Bitbucket enterprise style src URL for the file", ->
+        it "opens a Stash src URL for the file", ->
           spyOn(bitbucketFile, 'openUrlInBrowser')
           bitbucketFile.open()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://git.enterprize.me/some-user/some-repo/src/master/some-dir/some-file.md'
+            'https://git.enterprize.me/projects/some-project/repos/some-repo/browse/some-dir/some-file.md?at=master'
 
     describe "blame", ->
       describe "when the file is openable on Bitbucket.org", ->
@@ -240,6 +240,22 @@ describe "BitbucketFile", ->
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://bitbucket.org/some-user/some-repo/branch/master'
 
+      describe "when the remote repo is not hosted on bitbucket.org", ->
+        fixtureName = 'bitbucket-enterprise-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          bitbucketFile = setupBitbucketFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens a Stash src URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.openBranchCompare()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://git.enterprize.me/projects/some-project/repos/some-repo/compare/commits?sourceBranch=master'
+
     describe "history", ->
       describe "when the file is openable on Bitbucket.org", ->
         fixtureName = 'bitbucket-remote'
@@ -258,25 +274,47 @@ describe "BitbucketFile", ->
             'https://bitbucket.org/some-user/some-repo/history-node/master/some-dir/some-file.md'
 
     describe "copyUrl", ->
-      fixtureName = 'bitbucket-remote'
+      describe "when the file is openable on Bitbucket.org", ->
+        fixtureName = 'bitbucket-remote'
 
-      beforeEach ->
-        setupWorkingDir(fixtureName)
-        atom.config.set('open-on-bitbucket.includeLineNumbersInUrls', true)
-        setupBitbucketFile()
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          atom.config.set('open-on-bitbucket.includeLineNumbersInUrls', true)
+          setupBitbucketFile()
 
-      afterEach ->
-        teardownWorkingDirAndRestoreFixture(fixtureName)
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
 
-      describe "when text is selected", ->
-        it "copies the URL to the clipboard with the selection range in the hash", ->
-          bitbucketFile.copyUrl([[0, 0], [1, 1]])
-          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#cl-1:2'
+        describe "when text is selected", ->
+          it "copies the URL to the clipboard with the selection range in the hash", ->
+            bitbucketFile.copyUrl([[0, 0], [1, 1]])
+            expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#cl-1:2'
 
-      describe "when no text is selected", ->
-        it "copies the URL to the clipboard with the cursor location in the hash", ->
-          bitbucketFile.copyUrl([[2, 1], [2, 1]])
-          expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#cl-3'
+        describe "when no text is selected", ->
+          it "copies the URL to the clipboard with the cursor location in the hash", ->
+            bitbucketFile.copyUrl([[2, 1], [2, 1]])
+            expect(atom.clipboard.read()).toBe 'https://bitbucket.org/some-user/some-repo/src/80b7897ceb6bd7531708509b50afeab36a4b73fd/some-dir/some-file.md#cl-3'
+
+      describe "when the remote repo is not hosted on bitbucket.org", ->
+        fixtureName = 'bitbucket-enterprise-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          atom.config.set('open-on-bitbucket.includeLineNumbersInUrls', true)
+          setupBitbucketFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        describe "when text is selected", ->
+          it "copies the URL to the clipboard with the selection range in the hash", ->
+            bitbucketFile.copyUrl([[0, 0], [1, 1]])
+            expect(atom.clipboard.read()).toBe 'https://git.enterprize.me/projects/some-project/repos/some-repo/browse/some-dir/some-file.md?at=80b7897ceb6bd7531708509b50afeab36a4b73fd#1-2'
+
+        describe "when no text is selected", ->
+          it "copies the URL to the clipboard with the cursor location in the hash", ->
+            bitbucketFile.copyUrl([[2, 1], [2, 1]])
+            expect(atom.clipboard.read()).toBe 'https://git.enterprize.me/projects/some-project/repos/some-repo/browse/some-dir/some-file.md?at=80b7897ceb6bd7531708509b50afeab36a4b73fd#3'
 
     describe "openRepository", ->
       describe "when the file is openable on Bitbucket.org", ->
@@ -294,6 +332,23 @@ describe "BitbucketFile", ->
           bitbucketFile.openRepository()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://bitbucket.org/some-user/some-repo'
+
+      describe "when the remote repo is not hosted on bitbucket.org", ->
+        fixtureName = 'bitbucket-enterprise-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupBitbucketFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "opens a Stash repository URL for the file", ->
+          spyOn(bitbucketFile, 'openUrlInBrowser')
+          bitbucketFile.openRepository()
+          expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+            'https://git.enterprize.me/projects/some-project/repos/some-repo'
+
 
     describe "openIssues", ->
       describe 'when the file is openable on Bitbucket.org', ->
@@ -324,16 +379,20 @@ describe "BitbucketFile", ->
       bitbucketFile.gitUrl = -> "git@bitbucket.org:foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
 
-    it "returns the Bitbucket enterprise URL for an SSH remote URL with a non-standard user", ->
-      bitbucketFile.gitUrl = -> "git-user@bitbucket.org:foo/bar.git"
-      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
+    it "returns a Stash URL for an SSH remote URL with a non-standard user", ->
+      bitbucketFile.gitUrl = -> "git-user@git.enterprize.me:foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://git.enterprize.me/projects/foo/repos/bar"
 
-    it "returns a Bitbucket enterprise URL for a non-Github.com remote URL", ->
-      bitbucketFile.gitUrl = -> "https://git.enterprize.me/foo/bar.git"
-      expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://git.enterprize.me/foo/bar"
+    it "returns a Stash URL for an SSH remote URL with a non-standard port", ->
+      bitbucketFile.gitUrl = -> "ssh://git@git.enterprize.me:1234/foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://git.enterprize.me/projects/foo/repos/bar"
+
+    it "returns a Stash URL for a non-Github.com remote URL", ->
+      bitbucketFile.gitUrl = -> "https://user@git.enterprize.me/scm/foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://git.enterprize.me/projects/foo/repos/bar"
 
       bitbucketFile.gitUrl = -> "git@git.enterprize.me:foo/bar.git"
-      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://git.enterprize.me/foo/bar"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://git.enterprize.me/projects/foo/repos/bar"
 
     it "returns the Bitbucket.org URL for a git:// URL", ->
       bitbucketFile.gitUrl = -> "git://bitbucket.org/foo/bar.git"
