@@ -26,16 +26,16 @@ class BitbucketFile
 
   # Public
   blame: (lineRange) ->
-    if @isOpenable()
+    if @isOpenable(true)
       @openUrlInBrowser(@blameUrl() + @getLineRangeSuffix(lineRange))
     else
-      @reportValidationErrors()
+      @reportValidationErrors(true)
 
   history: ->
-    if @isOpenable()
+    if @isOpenable(true)
       @openUrlInBrowser(@historyUrl())
     else
-      @reportValidationErrors()
+      @reportValidationErrors(true)
 
   copyUrl: (lineRange) ->
     if @isOpenable()
@@ -50,10 +50,10 @@ class BitbucketFile
       @reportValidationErrors()
 
   openIssues: ->
-    if @isOpenable()
+    if @isOpenable(true)
       @openUrlInBrowser(@issuesUrl())
     else
-      @reportValidationErrors()
+      @reportValidationErrors(true)
 
   openRepository: ->
     if @isOpenable()
@@ -75,11 +75,11 @@ class BitbucketFile
       ''
 
   # Public
-  isOpenable: ->
-    @validationErrors().length is 0
+  isOpenable: (disallowStash = false) ->
+    @validationErrors(disallowStash).length is 0
 
   # Public
-  validationErrors: ->
+  validationErrors: (disallowStash) ->
     unless @repo
       return ["No repository found for path: #{@filePath}."]
 
@@ -89,11 +89,15 @@ class BitbucketFile
     unless @bitbucketRepoUrl()
       return ["Remote URL is not hosted on Bitbucket: #{@gitUrl()}"]
 
+    if (disallowStash && @isStashUrl(@gitUrl()))
+      return ["This feature is only available when hosting repositories on Bitbucket (bitbucket.org)"]
+
     []
 
   # Internal
-  reportValidationErrors: ->
-    message = @validationErrors().join('\n')
+  reportValidationErrors: (disallowStash = false) ->
+    message = @validationErrors(disallowStash).join('\n')
+    console.log(message)
     atom.notifications.addWarning(message)
 
   # Internal
