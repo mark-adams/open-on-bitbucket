@@ -1,6 +1,7 @@
 Shell = require 'shell'
 {Range} = require 'atom'
 parseUrl = require('url').parse
+formatUrl = require('url').format
 
 module.exports =
 class BitbucketFile
@@ -67,9 +68,9 @@ class BitbucketFile
       endRow = lineRange.end.row + 1
 
       if startRow is endRow
-        "#cl-#{startRow}"
+        if @isBitbucketCloudUrl(@gitUrl()) then "#cl-#{startRow}" else "##{startRow}"
       else
-        "#cl-#{startRow}:#{endRow}"
+        if @isBitbucketCloudUrl(@gitUrl()) then "#cl-#{startRow}:#{endRow}" else "##{startRow}-#{endRow}"
     else
       ''
 
@@ -101,11 +102,21 @@ class BitbucketFile
 
   # Internal
   blobUrl: ->
-    "#{@bitbucketRepoUrl()}/src/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    baseUrl = @bitbucketRepoUrl()
+
+    if @isBitbucketCloudUrl(baseUrl)
+      "#{baseUrl}/src/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+    else
+      "#{baseUrl}/browse/#{@encodeSegments(@repoRelativePath())}?at=#{@encodeSegments(@branchName())}"
 
   # Internal
   shaUrl: ->
-    "#{@bitbucketRepoUrl()}/src/#{@encodeSegments(@sha())}/#{@encodeSegments(@repoRelativePath())}"
+    baseUrl = @bitbucketRepoUrl()
+
+    if @isBitbucketCloudUrl(baseUrl)
+      "#{baseUrl}/src/#{@encodeSegments(@sha())}/#{@encodeSegments(@repoRelativePath())}"
+    else
+      "#{baseUrl}/browse/#{@encodeSegments(@repoRelativePath())}?at=#{@encodeSegments(@sha())}"
 
   # Internal
   blameUrl: ->
@@ -121,7 +132,12 @@ class BitbucketFile
 
   # Internal
   branchCompareUrl: ->
-    "#{@bitbucketRepoUrl()}/branch/#{@encodeSegments(@branchName())}"
+    baseUrl = @bitbucketRepoUrl()
+
+    if @isBitbucketCloudUrl(baseUrl)
+      "#{baseUrl}/branch/#{@encodeSegments(@branchName())}"
+    else
+      "#{baseUrl}/compare/commits?sourceBranch=#{@encodeSegments(@branchName())}"
 
   encodeSegments: (segments='') ->
     segments = segments.split('/')
@@ -136,9 +152,19 @@ class BitbucketFile
   # Internal
   bitbucketRepoUrl: ->
     url = @gitUrl()
+
+    if @isGithubUrl(url)
+      return
+    else if @isBitbucketCloudUrl(url)
+      return @bitbucketCloudRepoUrl(url)
+    else
+      return @stashRepoUrlRepoUrl(url)
+
+  # Internal
+  bitbucketCloudRepoUrl: (url) ->
     if url.match /https:\/\/[^\/]+\// # e.g., https://bitbucket.org/foo/bar.git
       url = url.replace(/\.git$/, '')
-    else if url.match /git[^@]*@[^:]+:/    # e.g., git@bitbucket.org:foo/bar.git
+    else if url.match /^git[^@]*@[^:]+:/    # e.g., git@bitbucket.org:foo/bar.git
       url = url.replace /^git[^@]*@([^:]+):(.+)$/, (match, host, repoPath) ->
         repoPath = repoPath.replace(/^\/+/, '') # replace leading slashes
         "http://#{host}/#{repoPath}".replace(/\.git$/, '')
@@ -149,14 +175,39 @@ class BitbucketFile
 
     url = url.replace(/\/+$/, '')
 
-    return url unless @isGithubUrl(url)
+    return url
 
+  # Internal
+  stashRepoUrlRepoUrl: (url) ->
+    urlObj = parseUrl(@bitbucketCloudRepoUrl(url))
+
+    urlObj.host = urlObj.hostname
+    urlObj.auth = null
+
+    [match, proj, repo] = urlObj.pathname.match /(?:\/scm)?\/(.+)\/(.+)/
+    urlObj.pathname = "/projects/#{proj}/repos/#{repo}"
+
+    return formatUrl(urlObj)
+
+  # Internal
   isGithubUrl: (url) ->
     return true if url.indexOf('git@github.com') is 0
 
     try
       {host} = parseUrl(url)
       host is 'github.com'
+
+  # Internal
+  isBitbucketCloudUrl: (url) ->
+    return true if url.indexOf('git@bitbucket.org') is 0
+
+    try
+      {host} = parseUrl(url)
+      host is 'bitbucket.org'
+
+  # Internal
+  isStashUrl: (url) ->
+    return !(@isGithubUrl(url) or @isBitbucketCloudUrl(url))
 
   # Internal
   repoRelativePath: ->
