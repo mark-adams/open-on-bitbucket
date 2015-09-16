@@ -223,6 +223,22 @@ describe "BitbucketFile", ->
             expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
               'https://bitbucket.org/some-user/some-repo/annotate/master/some-dir/some-file.md#cl-1:2'
 
+      describe "when the remote repo is not hosted on bitbucket.org", ->
+        fixtureName = 'bitbucket-enterprise-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupBitbucketFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "logs an error", ->
+          spyOn(atom.notifications, 'addWarning')
+          bitbucketFile.blame()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith \
+            'This feature is only available when hosting repositories on Bitbucket (bitbucket.org)'
+
     describe "branchCompare", ->
       describe "when the file is openable on Bitbucket.org", ->
         fixtureName = 'bitbucket-remote'
@@ -272,6 +288,22 @@ describe "BitbucketFile", ->
           bitbucketFile.history()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://bitbucket.org/some-user/some-repo/history-node/master/some-dir/some-file.md'
+
+      describe "when the remote repo is not hosted on bitbucket.org", ->
+        fixtureName = 'bitbucket-enterprise-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupBitbucketFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "logs an error", ->
+          spyOn(atom.notifications, 'addWarning')
+          bitbucketFile.history()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith \
+            'This feature is only available when hosting repositories on Bitbucket (bitbucket.org)'
 
     describe "copyUrl", ->
       describe "when the file is openable on Bitbucket.org", ->
@@ -366,6 +398,22 @@ describe "BitbucketFile", ->
           bitbucketFile.openIssues()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://bitbucket.org/some-user/some-repo/issues'
+
+      describe "when the remote repo is not hosted on bitbucket.org", ->
+        fixtureName = 'bitbucket-enterprise-remote'
+
+        beforeEach ->
+          setupWorkingDir(fixtureName)
+          setupBitbucketFile()
+
+        afterEach ->
+          teardownWorkingDirAndRestoreFixture(fixtureName)
+
+        it "logs an error", ->
+          spyOn(atom.notifications, 'addWarning')
+          bitbucketFile.openIssues()
+          expect(atom.notifications.addWarning).toHaveBeenCalledWith \
+            'This feature is only available when hosting repositories on Bitbucket (bitbucket.org)'
 
   describe "bitbucketRepoUrl", ->
     beforeEach ->
