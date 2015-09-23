@@ -192,7 +192,7 @@ describe "BitbucketFile", ->
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens a Stash src URL for the file", ->
+        it "opens a Bitbucket Server src URL for the file", ->
           spyOn(bitbucketFile, 'openUrlInBrowser')
           bitbucketFile.open()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
@@ -266,7 +266,7 @@ describe "BitbucketFile", ->
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens a Stash src URL for the file", ->
+        it "opens a Bitbucket Server src URL for the file", ->
           spyOn(bitbucketFile, 'openUrlInBrowser')
           bitbucketFile.openBranchCompare()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
@@ -375,7 +375,7 @@ describe "BitbucketFile", ->
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens a Stash repository URL for the file", ->
+        it "opens a Bitbucket Server repository URL for the file", ->
           spyOn(bitbucketFile, 'openUrlInBrowser')
           bitbucketFile.openRepository()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
@@ -427,15 +427,15 @@ describe "BitbucketFile", ->
       bitbucketFile.gitUrl = -> "git@bitbucket.org:foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
 
-    it "returns a Stash URL for an SSH remote URL with a non-standard user", ->
+    it "returns a Bitbucket Server URL for an SSH remote URL with a non-standard user", ->
       bitbucketFile.gitUrl = -> "git-user@git.enterprize.me:foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://git.enterprize.me/projects/foo/repos/bar"
 
-    it "returns a Stash URL for an SSH remote URL with a non-standard port", ->
+    it "returns a Bitbucket Server URL for an SSH remote URL with a non-standard port", ->
       bitbucketFile.gitUrl = -> "ssh://git@git.enterprize.me:1234/foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://git.enterprize.me/projects/foo/repos/bar"
 
-    it "returns a Stash URL for a non-Github.com remote URL", ->
+    it "returns a Bitbucket Server URL for a non-Github.com remote URL", ->
       bitbucketFile.gitUrl = -> "https://user@git.enterprize.me/scm/foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://git.enterprize.me/projects/foo/repos/bar"
 

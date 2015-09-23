@@ -1,6 +1,6 @@
 # Open on Bitbucket [![Build Status](https://travis-ci.org/mark-adams/open-on-bitbucket.svg?branch=master)](https://travis-ci.org/mark-adams/open-on-bitbucket)
 
-Provides commands to quickly view the current file on [Bitbucket](https://bitbucket.org) or [Stash](https://www.atlassian.com/stash/).
+Provides commands to quickly view the current file on [Bitbucket](https://bitbucket.org) or [Bitbucket Server](https://www.atlassian.com/software/bitbucket/server) (formerly Stash).
 
 ## Usage
 
