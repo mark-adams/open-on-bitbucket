@@ -423,6 +423,10 @@ describe "BitbucketFile", ->
       bitbucketFile.gitUrl = -> "https://bitbucket.org/foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "https://bitbucket.org/foo/bar"
 
+    it "returns the BitBucket url for an HTTP non SSL remote URL", ->
+      bitbucketFile.gitUrl = -> "http://bitbucket.org/foo/bar.git"
+      expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"
+
     it "returns the Bitbucket.org URL for an SSH remote URL", ->
       bitbucketFile.gitUrl = -> "git@bitbucket.org:foo/bar.git"
       expect(bitbucketFile.bitbucketRepoUrl()).toBe "http://bitbucket.org/foo/bar"

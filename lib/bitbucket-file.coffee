@@ -165,7 +165,7 @@ class BitbucketFile
 
   # Internal
   bitbucketCloudRepoUrl: (url) ->
-    if url.match /https:\/\/[^\/]+\// # e.g., https://bitbucket.org/foo/bar.git
+    if url.match /https?:\/\/[^\/]+\// # e.g., https://bitbucket.org/foo/bar.git or http://bitbucket.org/foo/bar.git
       url = url.replace(/\.git$/, '')
     else if url.match /^git[^@]*@[^:]+:/    # e.g., git@bitbucket.org:foo/bar.git
       url = url.replace /^git[^@]*@([^:]+):(.+)$/, (match, host, repoPath) ->
