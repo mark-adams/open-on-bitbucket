@@ -148,11 +148,11 @@ describe "BitbucketFile", ->
         afterEach ->
           teardownWorkingDirAndRestoreFixture(fixtureName)
 
-        it "opens the Bitbucket.org src URL for the file", ->
+        it "opens the Bitbucket.org src URL for the file on the master branch", ->
           spyOn(bitbucketFile, 'openUrlInBrowser')
           bitbucketFile.open()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
-            'https://bitbucket.org/some-user/some-repo/src/non-tracked-branch/some-dir/some-file.md'
+            'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md'
 
       describe "when there is no remote", ->
         fixtureName = 'no-remote'
@@ -197,6 +197,22 @@ describe "BitbucketFile", ->
           bitbucketFile.open()
           expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
             'https://git.enterprize.me/projects/some-project/repos/some-repo/browse/some-dir/some-file.md?at=master'
+
+    describe "openOnMaster", ->
+      fixtureName = 'non-tracked-branch'
+
+      beforeEach ->
+        setupWorkingDir(fixtureName)
+        setupBitbucketFile()
+
+      afterEach ->
+        teardownWorkingDirAndRestoreFixture(fixtureName)
+
+      it "opens the Bitbucket.org src URL for the file", ->
+        spyOn(bitbucketFile, 'openUrlInBrowser')
+        bitbucketFile.openOnMaster()
+        expect(bitbucketFile.openUrlInBrowser).toHaveBeenCalledWith \
+          'https://bitbucket.org/some-user/some-repo/src/master/some-dir/some-file.md'
 
     describe "blame", ->
       describe "when the file is openable on Bitbucket.org", ->

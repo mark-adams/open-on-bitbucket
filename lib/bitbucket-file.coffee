@@ -25,6 +25,13 @@ class BitbucketFile
       @reportValidationErrors()
 
   # Public
+  openOnMaster: (lineRange) ->
+    if @isOpenable()
+      @openUrlInBrowser(@blobUrlForMaster() + @getLineRangeSuffix(lineRange))
+    else
+      @reportValidationErrors()
+
+  # Public
   blame: (lineRange) ->
     if @isOpenable(true)
       @openUrlInBrowser(@blameUrl() + @getLineRangeSuffix(lineRange))
@@ -108,9 +115,19 @@ class BitbucketFile
     baseUrl = @bitbucketRepoUrl()
 
     if @isBitbucketCloudUrl(baseUrl)
-      "#{baseUrl}/src/#{@encodeSegments(@branchName())}/#{@encodeSegments(@repoRelativePath())}"
+      "#{baseUrl}/src/#{@remoteBranchName()}/#{@encodeSegments(@repoRelativePath())}"
     else
-      "#{baseUrl}/browse/#{@encodeSegments(@repoRelativePath())}?at=#{@encodeSegments(@branchName())}"
+      "#{baseUrl}/browse/#{@encodeSegments(@repoRelativePath())}?at=#{@remoteBranchName()}"
+
+  # Internal
+  blobUrlForMaster: ->
+    baseUrl = @bitbucketRepoUrl()
+
+    if @isBitbucketCloudUrl(baseUrl)
+      "#{baseUrl}/src/master/#{@encodeSegments(@repoRelativePath())}"
+    else
+      "#{baseUrl}/browse/#{@encodeSegments(@repoRelativePath())}?at=master"
+
 
   # Internal
   shaUrl: ->
@@ -176,6 +193,7 @@ class BitbucketFile
     else if url.match /^git:\/\/[^\/]+\// # e.g., git://bitbucket.org/foo/bar.git
       url = "http#{url.substring(3).replace(/\.git$/, '')}"
 
+    url = url.replace(/\.git$/, '')
     url = url.replace(/\/+$/, '')
 
     return url
@@ -228,7 +246,7 @@ class BitbucketFile
 
   # Internal
   sha: ->
-    @repo.getReferenceTarget("HEAD", @filePath)
+    @repo.getReferenceTarget('HEAD', @filePath)
 
   # Internal
   branchName: ->
@@ -240,3 +258,10 @@ class BitbucketFile
     return shortBranch unless branchMerge.indexOf('refs/heads/') is 0
 
     branchMerge.substring(11)
+
+  # Internal
+  remoteBranchName: ->
+    if @remoteName()?
+      @encodeSegments(@branchName())
+    else
+      'master'

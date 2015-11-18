@@ -5,12 +5,17 @@ module.exports =
     includeLineNumbersInUrls:
       default: true
       type: 'boolean'
+      description: 'Include the line range selected in the editor when opening or copying URLs to the clipboard. When opened in the browser, the GitHub page will automatically scroll to the selected line range.'
 
   activate: ->
     atom.commands.add 'atom-pane',
       'open-on-bitbucket:file': ->
         if itemPath = getActivePath()
           BitbucketFile.fromPath(itemPath).open(getSelectedRange())
+
+      'open-on-bitbucket:file-on-master': ->
+        if itemPath = getActivePath()
+          BitbucketFile.fromPath(itemPath).openOnMaster(getSelectedRange())
 
       'open-on-bitbucket:blame': ->
         if itemPath = getActivePath()
