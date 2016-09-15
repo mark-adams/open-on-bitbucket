@@ -1,3 +1,13 @@
+'context-menu':
+  'atom-workspace atom-text-editor:not(.mini)': [
+    {label: 'Open on BitBucket', command: 'open-on-bitbucket:file'}
+    {label: 'Open on BitBucket (master)', command: 'open-on-bitbucket:file-on-master'}
+  ]
+  '.tree-view .file > .name': [
+    {label: 'Open on BitBucket', command: 'open-on-bitbucket:file'}
+    {label: 'Open on BitBucket (master)', command: 'open-on-bitbucket:file-on-master'}
+  ]
+
 'menu': [
   {
     'label': 'Packages'
