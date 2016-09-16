@@ -1,4 +1,3 @@
-pkg = require('../package.json')
 BitbucketFile = require './bitbucket-file'
 
 plugin = module.exports
