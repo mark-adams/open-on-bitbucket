@@ -20,42 +20,42 @@ plugin.activate = ->
 
 openBitbucketBlame = ({target}) ->
   itemPath = if target.dataset.path then target.dataset.path else getActivePath()
-  selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+  selectedRange = if target.dataset.path then [[0, 0], [0, 0]] else getSelectedRange()
   BitbucketFile.fromPath(itemPath).blame(selectedRange)
 
 openBitbucketBranchCompare = ({target}) ->
   itemPath = if target.dataset.path then target.dataset.path else getActivePath()
-  selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+  selectedRange = if target.dataset.path then [[0, 0], [0, 0]] else getSelectedRange()
   BitbucketFile.fromPath(itemPath).openBranchCompare()
 
 openBitbucketCopyUrl = ({target}) ->
   itemPath = if target.dataset.path then target.dataset.path else getActivePath()
-  selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+  selectedRange = if target.dataset.path then [[0, 0], [0, 0]] else getSelectedRange()
   BitbucketFile.fromPath(itemPath).copyUrl(selectedRange)
 
 openBitbucketFile = ({target}) ->
   itemPath = if target.dataset.path then target.dataset.path else getActivePath()
-  selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+  selectedRange = if target.dataset.path then [[0, 0], [0, 0]] else getSelectedRange()
   BitbucketFile.fromPath(itemPath).open(selectedRange)
 
 openBitbucketFileOnMaster = ({target}) ->
   itemPath = if target.dataset.path then target.dataset.path else getActivePath()
-  selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+  selectedRange = if target.dataset.path then [[0, 0], [0, 0]] else getSelectedRange()
   BitbucketFile.fromPath(itemPath).openOnMaster(selectedRange)
 
 openBitbucketHistory = ({target}) ->
   itemPath = if target.dataset.path then target.dataset.path else getActivePath()
-  selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+  selectedRange = if target.dataset.path then [[0, 0], [0, 0]] else getSelectedRange()
   BitbucketFile.fromPath(itemPath).history()
 
 openBitbucketIssues = ({target}) ->
   itemPath = if target.dataset.path then target.dataset.path else getActivePath()
-  selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+  selectedRange = if target.dataset.path then [[0, 0], [0, 0]] else getSelectedRange()
   BitbucketFile.fromPath(itemPath).openIssues()
 
 openBitbucketRepository = ({target}) ->
   itemPath = if target.dataset.path then target.dataset.path else getActivePath()
-  selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+  selectedRange = if target.dataset.path then [[0, 0], [0, 0]] else getSelectedRange()
   BitbucketFile.fromPath(itemPath).openRepository()
 
 getActivePath = ->
