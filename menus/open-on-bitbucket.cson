@@ -1,18 +1,50 @@
-'menu': [
-  {
-    'label': 'Packages'
-    'submenu': [
-      'label': 'Open On Bitbucket'
-      'submenu': [
-        { 'label': 'Blame', 'command': 'open-on-bitbucket:blame' }
-        { 'label': 'Branch Compare', 'command': 'open-on-bitbucket:branch-compare' }
-        { 'label': 'Copy URL', 'command': 'open-on-bitbucket:copy-url' }
-        { 'label': 'File', 'command': 'open-on-bitbucket:file' }
-        { 'label': 'File on Master', 'command': 'open-on-bitbucket:file-on-master' }
-        { 'label': 'History', 'command': 'open-on-bitbucket:history' }
-        { 'label': 'Issues', 'command': 'open-on-bitbucket:issues' }
-        { 'label': 'Repository', 'command': 'open-on-bitbucket:repository' }
-      ]
+'context-menu':
+    'atom-workspace atom-text-editor:not(.mini)': [
+        {
+            'label': 'Open On Bitbucket'
+            'submenu': [
+                { 'label': 'Blame', 'command': 'open-on-bitbucket:blame' }
+                { 'label': 'Branch Compare', 'command': 'open-on-bitbucket:branch-compare' }
+                { 'label': 'Copy URL', 'command': 'open-on-bitbucket:copy-url' }
+                { 'label': 'File', 'command': 'open-on-bitbucket:file' }
+                { 'label': 'File on Master', 'command': 'open-on-bitbucket:file-on-master' }
+                { 'label': 'History', 'command': 'open-on-bitbucket:history' }
+                { 'label': 'Issues', 'command': 'open-on-bitbucket:issues' }
+                { 'label': 'Repository', 'command': 'open-on-bitbucket:repository' }
+            ]
+        }
     ]
-  }
+    '.tree-view .file .name': [
+        {
+            'label': 'Open On Bitbucket'
+            'submenu': [
+                { 'label': 'Blame', 'command': 'open-on-bitbucket:blame' }
+                { 'label': 'Branch Compare', 'command': 'open-on-bitbucket:branch-compare' }
+                { 'label': 'Copy URL', 'command': 'open-on-bitbucket:copy-url' }
+                { 'label': 'File', 'command': 'open-on-bitbucket:file' }
+                { 'label': 'File on Master', 'command': 'open-on-bitbucket:file-on-master' }
+                { 'label': 'History', 'command': 'open-on-bitbucket:history' }
+                { 'label': 'Issues', 'command': 'open-on-bitbucket:issues' }
+                { 'label': 'Repository', 'command': 'open-on-bitbucket:repository' }
+            ]
+        }
+    ]
+
+'menu': [
+    {
+        'label': 'Packages'
+        'submenu': [
+            'label': 'Open On Bitbucket'
+            'submenu': [
+                { 'label': 'Blame', 'command': 'open-on-bitbucket:blame' }
+                { 'label': 'Branch Compare', 'command': 'open-on-bitbucket:branch-compare' }
+                { 'label': 'Copy URL', 'command': 'open-on-bitbucket:copy-url' }
+                { 'label': 'File', 'command': 'open-on-bitbucket:file' }
+                { 'label': 'File on Master', 'command': 'open-on-bitbucket:file-on-master' }
+                { 'label': 'History', 'command': 'open-on-bitbucket:history' }
+                { 'label': 'Issues', 'command': 'open-on-bitbucket:issues' }
+                { 'label': 'Repository', 'command': 'open-on-bitbucket:repository' }
+            ]
+        ]
+    }
 ]

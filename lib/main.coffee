@@ -1,45 +1,62 @@
-BitbucketFile  = require './bitbucket-file'
+BitbucketFile = require './bitbucket-file'
 
-module.exports =
-  config:
+plugin = module.exports
+
+plugin.config =
     includeLineNumbersInUrls:
       default: true
       type: 'boolean'
       description: 'Include the line range selected in the editor when opening or copying URLs to the clipboard. When opened in the browser, the Bitbucket page will automatically scroll to the selected line range.'
 
-  activate: ->
-    atom.commands.add 'atom-pane',
-      'open-on-bitbucket:file': ->
-        if itemPath = getActivePath()
-          BitbucketFile.fromPath(itemPath).open(getSelectedRange())
+plugin.activate = ->
+    atom.commands.add ".tree-view .file .name, atom-pane", "open-on-bitbucket:blame", openBitbucketBlame
+    atom.commands.add ".tree-view .file .name, atom-pane", "open-on-bitbucket:branch-compare", openBitbucketBranchCompare
+    atom.commands.add ".tree-view .file .name, atom-pane", "open-on-bitbucket:copy-url", openBitbucketCopyUrl
+    atom.commands.add ".tree-view .file .name, atom-pane", "open-on-bitbucket:file", openBitbucketFile
+    atom.commands.add ".tree-view .file .name, atom-pane", "open-on-bitbucket:file-on-master", openBitbucketFileOnMaster
+    atom.commands.add ".tree-view .file .name, atom-pane", "open-on-bitbucket:history", openBitbucketHistory
+    atom.commands.add ".tree-view .file .name, atom-pane", "open-on-bitbucket:issues", openBitbucketIssues
+    atom.commands.add ".tree-view .file .name, atom-pane", "open-on-bitbucket:repository", openBitbucketRepository
 
-      'open-on-bitbucket:file-on-master': ->
-        if itemPath = getActivePath()
-          BitbucketFile.fromPath(itemPath).openOnMaster(getSelectedRange())
+openBitbucketBlame = ({target}) ->
+    itemPath = if target.dataset.path then target.dataset.path else getActivePath()
+    selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+    BitbucketFile.fromPath(itemPath).blame(selectedRange)
 
-      'open-on-bitbucket:blame': ->
-        if itemPath = getActivePath()
-          BitbucketFile.fromPath(itemPath).blame(getSelectedRange())
+openBitbucketBranchCompare = ({target}) ->
+    itemPath = if target.dataset.path then target.dataset.path else getActivePath()
+    selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+    BitbucketFile.fromPath(itemPath).openBranchCompare()
 
-      'open-on-bitbucket:history': ->
-        if itemPath = getActivePath()
-          BitbucketFile.fromPath(itemPath).history()
+openBitbucketCopyUrl = ({target}) ->
+    itemPath = if target.dataset.path then target.dataset.path else getActivePath()
+    selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+    BitbucketFile.fromPath(itemPath).copyUrl(selectedRange)
 
-      'open-on-bitbucket:issues': ->
-        if itemPath = getActivePath()
-          BitbucketFile.fromPath(itemPath).openIssues()
+openBitbucketFile = ({target}) ->
+    itemPath = if target.dataset.path then target.dataset.path else getActivePath()
+    selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+    BitbucketFile.fromPath(itemPath).open(selectedRange)
 
-      'open-on-bitbucket:copy-url': ->
-        if itemPath = getActivePath()
-          BitbucketFile.fromPath(itemPath).copyUrl(getSelectedRange())
+openBitbucketFileOnMaster = ({target}) ->
+    itemPath = if target.dataset.path then target.dataset.path else getActivePath()
+    selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+    BitbucketFile.fromPath(itemPath).openOnMaster(selectedRange)
 
-      'open-on-bitbucket:branch-compare': ->
-        if itemPath = getActivePath()
-          BitbucketFile.fromPath(itemPath).openBranchCompare()
+openBitbucketHistory = ({target}) ->
+    itemPath = if target.dataset.path then target.dataset.path else getActivePath()
+    selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+    BitbucketFile.fromPath(itemPath).history()
 
-      'open-on-bitbucket:repository': ->
-        if itemPath = getActivePath()
-          BitbucketFile.fromPath(itemPath).openRepository()
+openBitbucketIssues = ({target}) ->
+    itemPath = if target.dataset.path then target.dataset.path else getActivePath()
+    selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+    BitbucketFile.fromPath(itemPath).openIssues()
+
+openBitbucketRepository = ({target}) ->
+    itemPath = if target.dataset.path then target.dataset.path else getActivePath()
+    selectedRange = if target.dataset.path then [[0,0],[0,0]] else getSelectedRange()
+    BitbucketFile.fromPath(itemPath).openRepository()
 
 getActivePath = ->
   atom.workspace.getActivePaneItem()?.getPath?()
