@@ -1,6 +1,6 @@
 {
   "name": "open-on-bitbucket",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "main": "./lib/main",
   "description": "View the active file on Bitbucket Cloud or Server (formerly Stash)",
   "repository": "https://github.com/mark-adams/open-on-bitbucket",
