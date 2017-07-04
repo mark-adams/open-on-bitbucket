@@ -14,6 +14,15 @@
       "open-on-bitbucket:history",
       "open-on-bitbucket:issues",
       "open-on-bitbucket:repository"
+    ],
+    ".tree-view .file .name": [
+        "open-on-bitbucket:blame",
+        "open-on-bitbucket:branch-compare",
+        "open-on-bitbucket:copy-url",
+        "open-on-bitbucket:file",
+        "open-on-bitbucket:history",
+        "open-on-bitbucket:issues",
+        "open-on-bitbucket:repository"
     ]
   },
   "engines": {

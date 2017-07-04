@@ -16,6 +16,7 @@ When editing a file in Atom, use the command palette or keyboard shortcuts to:
 ![Command Palette](https://cloud.githubusercontent.com/assets/472350/7668596/86267acc-fc06-11e4-92e4-8737a632a021.png)
 
 
+
 ---
 
 Inspired by the [Open on Github package][open-on-github] for Atom.
